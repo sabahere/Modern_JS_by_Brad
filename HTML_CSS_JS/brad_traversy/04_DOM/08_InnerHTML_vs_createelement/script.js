@@ -29,3 +29,4 @@ createNewItem("Banana");
 const remove = document.querySelectorAll(".item");
 console.log(remove[1]);
 //remove[3].remove();
+//continuation......to next file Refactor to multiple functions
