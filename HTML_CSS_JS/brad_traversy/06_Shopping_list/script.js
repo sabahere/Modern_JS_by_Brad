@@ -143,4 +143,3 @@ clearAll.addEventListener("click", onClearAll);
 list.addEventListener("click", removeListByIcon);
 filterInput.addEventListener("input", filterItem);
 document.addEventListener("DOMContentLoaded", toDisplay);
-//localStorage.clear();
