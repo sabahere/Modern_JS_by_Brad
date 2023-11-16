@@ -33,6 +33,10 @@ header h1 {
   margin-left: 10px;
 }
 
+#icon-pen {
+  color: #fff;
+}
+
 .container {
   max-width: 500px;
   margin: 30px auto;
@@ -127,6 +131,14 @@ header h1 {
   margin: 0 5px 20px;
   font-weight: 700;
   cursor: pointer;
+}
+.fa-pen {
+  color: black;
+  font-size: 12px;
+  padding-right: 10px;
+}
+.edit-mode {
+  color: #ccc;
 }
 
 @media (max-width: 500px) {

@@ -3,6 +3,8 @@ const itemInput = document.getElementById("item-input");
 const filterInput = document.querySelector(".filter");
 const clearAll = document.getElementById("clear");
 const list = document.querySelector("ul");
+const formBtn = form.querySelector("button");
+let isEditMode = false;
 //check UI state
 checkUI();
 
@@ -27,14 +29,21 @@ function createList(item) {
 }
 function createButton() {
   const button = document.createElement("button");
-  button.id = "button";
   button.className = "remove-item btn-link text-red";
-  const icon = createIcon();
-  button.appendChild(icon);
+  const icon1 = createIcon1();
+  const icon2 = createIcon2();
+  button.appendChild(icon1);
+  button.appendChild(icon2);
   return button;
 }
 
-function createIcon() {
+function createIcon1() {
+  const i = document.createElement("i");
+  i.className = "fa-solid fa-pen";
+  i.id = "icon";
+  return i;
+}
+function createIcon2() {
   const i = document.createElement("i");
   i.className = "fa-solid fa-xmark";
   i.id = "icon";
@@ -47,6 +56,12 @@ function onSubmit(e) {
   if (itemInput.value === "") {
     alert("Please fill the field.");
     return;
+  }
+  if (isEditMode) {
+    const itemToEdit = list.querySelector(".edit-mode");
+    removeListFromStorage(itemToEdit.textContent);
+    itemToEdit.remove();
+    isEditMode = false;
   }
   createNewItem(itemInput.value);
   addItemToLocalStorage(itemInput.value);
@@ -86,12 +101,14 @@ function onClearAll() {
 
 //removing the corresponding li of the corresponding clicked icon
 function removeListByIcon(e) {
-  if (e.target.parentElement.classList.contains("remove-item")) {
+  if (e.target.classList.contains("fa-xmark")) {
     if (confirm("Are you sure?") === true) {
       const targetElement = e.target.parentElement.parentElement;
       removeListFromStorage(targetElement.innerText);
       targetElement.remove();
     }
+  } else if (e.target.classList.contains("fa-pen")) {
+    setItemToEdit(e.target.parentElement.parentElement);
   }
   //OR
   /* if (e.target.tagName === "I") {
@@ -99,16 +116,28 @@ function removeListByIcon(e) {
       li.remove();
     } */
   checkUI();
+}
 
-  function removeListFromStorage(value) {
-    let itemFromStorage;
-    itemFromStorage = JSON.parse(localStorage.getItem("items"));
-    const index = itemFromStorage.indexOf(value);
-    //removeditem from storage
-    itemFromStorage.splice(index, 1);
+function setItemToEdit(item) {
+  isEditMode = true;
+  document
+    .querySelectorAll("li")
+    .forEach((li) => li.classList.remove("edit-mode"));
+  item.classList.add("edit-mode");
+  formBtn.innerHTML =
+    '<i class="fa-solid fa-pen" id="icon-pen"></i> Update Item';
+  itemInput.value = item.innerText;
+  formBtn.style.backgroundColor = "#228b22";
+}
 
-    localStorage.setItem("items", JSON.stringify(itemFromStorage));
-  }
+function removeListFromStorage(value) {
+  let itemFromStorage;
+  itemFromStorage = JSON.parse(localStorage.getItem("items"));
+  const index = itemFromStorage.indexOf(value);
+  //removeditem from storage
+  itemFromStorage.splice(index, 1);
+
+  localStorage.setItem("items", JSON.stringify(itemFromStorage));
 }
 
 //Clear UI state
@@ -121,6 +150,10 @@ function checkUI() {
   } else {
     filterInput.style.display = "block";
     clearAll.style.display = "block";
+  }
+  if (!isEditMode) {
+    formBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add item';
+    formBtn.style.backgroundColor = "#333";
   }
 }
 //Filter Item
@@ -143,3 +176,4 @@ clearAll.addEventListener("click", onClearAll);
 list.addEventListener("click", removeListByIcon);
 filterInput.addEventListener("input", filterItem);
 document.addEventListener("DOMContentLoaded", toDisplay);
+checkUI();
