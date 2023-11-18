@@ -52,7 +52,6 @@ function createIcon2() {
 //adding Event listener to submit form
 function onSubmit(e) {
   e.preventDefault();
-  console.log("mean babi");
   if (itemInput.value === "") {
     alert("Please fill the field.");
     return;
@@ -64,10 +63,11 @@ function onSubmit(e) {
     isEditMode = false;
   } else {
     if (checkIfItemExist(itemInput.value)) {
-      alert("That item already exists!");
+      alert("This item already exist!");
       return;
     }
   }
+
   createNewItem(itemInput.value);
   addItemToLocalStorage(itemInput.value);
   itemInput.value = "";
@@ -107,10 +107,15 @@ function onClearAll() {
 //removing the corresponding li of the corresponding clicked icon
 function removeListByIcon(e) {
   if (e.target.classList.contains("fa-xmark")) {
-    if (confirm("Are you sure?") === true) {
-      const targetElement = e.target.parentElement.parentElement;
-      removeListFromStorage(targetElement.innerText);
-      targetElement.remove();
+    if (isEditMode) {
+      alert("Update the item first.");
+      return;
+    } else {
+      if (confirm("Are you sure?") === true) {
+        const targetElement = e.target.parentElement.parentElement;
+        removeListFromStorage(targetElement.innerText);
+        targetElement.remove();
+      }
     }
   } else if (e.target.classList.contains("fa-pen")) {
     setItemToEdit(e.target.parentElement.parentElement);
@@ -122,9 +127,9 @@ function removeListByIcon(e) {
     } */
   checkUI();
 }
-function checkIfItemExist(item) {
-  const itemFromStorage = getItemFromStorage();
-  return itemFromStorage.includes(item);
+function checkIfItemExist(value) {
+  const itemFromStorage = getItemFromStorage().map((v) => v.toLowerCase());
+  return itemFromStorage.includes(value.toLowerCase());
 }
 
 function setItemToEdit(item) {
