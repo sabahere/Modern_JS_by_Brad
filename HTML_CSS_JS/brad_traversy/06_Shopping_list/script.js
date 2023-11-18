@@ -62,6 +62,11 @@ function onSubmit(e) {
     removeListFromStorage(itemToEdit.textContent);
     itemToEdit.remove();
     isEditMode = false;
+  } else {
+    if (checkIfItemExist(itemInput.value)) {
+      alert("That item already exists!");
+      return;
+    }
   }
   createNewItem(itemInput.value);
   addItemToLocalStorage(itemInput.value);
@@ -116,6 +121,10 @@ function removeListByIcon(e) {
       li.remove();
     } */
   checkUI();
+}
+function checkIfItemExist(item) {
+  const itemFromStorage = getItemFromStorage();
+  return itemFromStorage.includes(item);
 }
 
 function setItemToEdit(item) {
