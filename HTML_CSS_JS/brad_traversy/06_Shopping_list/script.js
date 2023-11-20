@@ -97,10 +97,15 @@ function getItemFromStorage() {
 //Clearing all items at once
 function onClearAll() {
   const li = document.querySelectorAll("li");
-  if (confirm("Are you sure?")) {
-    li.forEach((item) => item.remove());
-    localStorage.clear();
-    checkUI();
+  if (isEditMode) {
+    alert("Update the item first.");
+    return;
+  } else {
+    if (confirm("Are you sure?")) {
+      li.forEach((item) => item.remove());
+      localStorage.clear();
+      checkUI();
+    }
   }
 }
 
