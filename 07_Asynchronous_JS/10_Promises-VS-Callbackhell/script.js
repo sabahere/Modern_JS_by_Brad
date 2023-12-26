@@ -1,4 +1,4 @@
-//Callback hell
+//Callback hell vs promises
 
 function getData(endpoint) {
   return new Promise((resolve, reject) => {
